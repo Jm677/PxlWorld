@@ -149,7 +149,7 @@ void setup()
   NewPlant("Lilie", 2, 0, 100, -10, 30, 100, 255, 1, 6, 100, 100);
   NewPlant("Birke", 1, 5, 80, 0, 30, 100, 255, 30, 8, 100, 1000);
   LoadPlantTypes();
-  LoadMap(WorldName);
+  //LoadMap(WorldName);
 
   // redrawPlants();
 }
