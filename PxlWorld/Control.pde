@@ -1,88 +1,115 @@
 void keyPressed()
 {
-  int k= int(str(key));
-
-  if (k>0&&k<=Maxid)SetId=k;
-  else
+  switch(keyCode)
   {
-    switch(key)
+  case RIGHT:
+    SetId++;
+
+    break;
+  case LEFT:
+    SetId--;
+    if (SetId<1)SetId=1;
+
+    break;
+  case UP:
+    LocalPlantTypeSel=true;
+    break;
+  case DOWN:
+    LocalPlantTypeSel=false;
+    break;
+  }
+  switch(key)
+  {
+  case 'ü':
+    Weatherstation[0]=0;
+    break;
+  case '+':
+    MapData[SeaWaterI]*=1.1;
+    break;
+  case 'h':
+    MapData[SunI]+=50;
+    println(int(MapData[SunI]));
+    break;
+  case 'c':
+    MapData[SunI]-=50;
+    println(int(MapData[SunI]));
+    break;
+  case '-':
+    MapData[SeaWaterI] *=0.9;
+    break;
+  case's':
     {
-    case 'ü':
-      Weatherstation[0]=0;
+      SaveWorld(WorldName);
       break;
-    case '+':
-      MapData[SeaWaterI]*=1.1;
+    }
+  case'm':
+    {
+      Overlay=2;
       break;
-    case 'h':
-      MapData[SunI]+=50;
-      println(int(MapData[SunI]));
+    }
+  case'n':
+    {
+      Overlay=1;
       break;
-    case 'c':
-      MapData[SunI]-=50;
-      println(int(MapData[SunI]));
+    }
+  case'b':
+    {
+      Overlay=0;
       break;
-    case '-':
-      MapData[SeaWaterI] *=0.9;
+    }
+  case'v':
+    {
+
+      if (!ShowVegetation)ShowVegetation=true;
+      else ShowVegetation=false;
       break;
-    case's':
-      {
-        SaveWorld(WorldName);
-        break;
-      }
-    case'm':
-      {
-        Overlay=2;
-        break;
-      }
-    case'n':
-      {
-        Overlay=1;
-        break;
-      }
-    case'b':
-      {
-        Overlay=0;
-        break;
-      }
-    case'v':
-      {
+    }
+  case't':
+    {
 
-        if (!ShowVegetation)ShowVegetation=true;
-        else ShowVegetation=false;
-        break;
-      }
-    case't':
-      {
+      if (!TimeDebug)TimeDebug=true;
+      else TimeDebug=false;
+      break;
+    }
+  case'w':
+    {
+      if (!ShowWeather)ShowWeather=true;
+      else ShowWeather=false;
 
-        if (!TimeDebug)TimeDebug=true;
-        else TimeDebug=false;
-        break;
-      }
-    case'w':
-      {
-        if (!ShowWeather)ShowWeather=true;
-        else ShowWeather=false;
+      break;
+    }
+  case'p':
+    {
+      if (!Pause)Pause=true;
+      else Pause=false;
 
-        break;
-      }
-    case'p':
-      {
-        if (!Pause)Pause=true;
-        else Pause=false;
+      break;
+    }
+  case',':
+    {
+      Overlay=3;
+      break;
+    }
 
-        break;
-      }
-    case',':
-      {
-        Overlay=3;
-        break;
-      }
-
-    case 'l':
-      {
-        LoadWorld("World1");
-        break;
-      }
+  case 'l':
+    {
+      LoadWorld("World1");
+      break;
+    }
+  case 'L':
+    {
+      LocalPlantTypeSel=true;
+      break;
+    }
+  case 'G':
+    {
+      LocalPlantTypeSel=false;
+      break;
+    }
+     case 'S':
+    {
+      LoadLokalPlantsToGlobal(SetId,PlantsPath);
+      break;
     }
   }
   //println("Sealvl: " +str(Sealvl));
@@ -107,7 +134,7 @@ void mouseReleased()
     println();
   } else if (mouseButton==RIGHT)
   {
-    println("Added "+PlantTypes.get(SetId).Name);
+
     if (PlantID[X][Y]==0)
     {
       PlantSet[0]=X;
