@@ -1,7 +1,7 @@
 class Plant
 {
   int X, Y, Id, GroundWaterMin, GroundWaterMax, TempMax, TempMin, HeightMax, HeightMin, FertilityRate, FertilityRadius, Toughness, Livespan;
-  int Live;
+  int Live, Age, Health;
   int TicksSinceRep, FertTrys;
   String Name, Save;
   color C;
@@ -16,16 +16,49 @@ class Plant
     X=x;
     Y=y;
     Id=id;
-    PlantID[x][y]=Id;
     Randomx=round(0);
     Randomy=round(0);
+    if (Id>=2000)
+    {
+      boolean There=false;
+      int PlantIndex=0;
+      for (PlantData P : LocalPlantTypes)
+      {
+        //println("comparing: "+P.Name+" and "+GlobalPlantTypes.get(Id-2000).Name);
+        if (P.Name==GlobalPlantTypes.get(Id-2000).Name) {
+          //println("Hit");
+          There=true;
+          PlantIndex=P.Id;
+          println(PlantIndex);
+          break;
+        }
+      }
+      if (!There)
+      {
+        GlobalPlantTypes.get(Id-2000).Id=LocalPlantTypes.size();
+        LocalPlantTypes.add(GlobalPlantTypes.get(Id-2000));
+        Id=LocalPlantTypes.size()-1;
+      
+      }
+      else
+      {
+        Id=PlantIndex;
+        LocalPlantTypeSel=true;
+        SetId=Id;
+        println(LocalPlantTypes.get(SetId).Name);
+      }
+    }
     loadData();
+  }
+  String Data()
+  {
+    return(str(X)+" "+str(Y)+" "+str(Id)+" "+str(Health)+" "+str(Live)+" "+str(Age)+" "+str(Livespan)+" "+str(TicksSinceRep));
   }
   void loadData()
   {
-    PlantData P=PlantTypes.get(Id);
+    PlantData P=LocalPlantTypes.get(Id);
     Name=P.Name;
-    GroundWaterMin=PlantTypes.get(Id).GroundWaterMin;
+    GroundWaterMin=LocalPlantTypes.get(Id).GroundWaterMin;
     GroundWaterMax=P.GroundWaterMax;
     TempMin=P.TempMin;
     TempMax=P.TempMax;
@@ -37,6 +70,7 @@ class Plant
     Livespan=round(random(1-LivespanVariation, 1+LivespanVariation)*P.Livespan);
     TicksSinceRep=int(random(0, 1)*FertilityRate);
     Pic=P.Pic;
+    
 
     if (PlantHealth[X][Y]==0)PlantHealth[X][Y]=Live;
     // println(PlantAge[X][Y],PlantHealth[X][Y]);
@@ -48,21 +82,20 @@ class Plant
   void update()
   {
 
-    PlantAge[X][Y]++;
+    Age++;
     PlantID[X][Y]=Id;
-    if (SecType[X][Y]!=1&&GroundWater[X][Y]>=GroundWaterMin&&GroundWater[X][Y]<=GroundWaterMax&&Temp[X][Y]>=TempMin&&Temp[X][Y]<=TempMax&&Elev[X][Y]>=HeightMin&&Elev[X][Y]<=HeightMax&&PlantAge[X][Y]<=Livespan-Toughness&&!(CheckSur(1, 0, Id, X, Y)&&CheckSurounding))
+    if (SecType[X][Y]!=1&&GroundWater[X][Y]>=GroundWaterMin&&GroundWater[X][Y]<=GroundWaterMax&&Temp[X][Y]>=TempMin&&Temp[X][Y]<=TempMax&&Elev[X][Y]>=HeightMin&&Elev[X][Y]<=HeightMax&&Age<=Livespan-Toughness&&!(CheckSur(1, 0, Id, X, Y)&&CheckSurounding))
     {
-      PlantHealth[X][Y]+=1;
+      Health+=1;
     } else
     {
-      PlantHealth[X][Y]-=1;
+      Health-=1;
     }
-    if (PlantHealth[X][Y]<=0)
+    if (Health<=0)
     {
-      PlantHealth[X][Y]=0;
+      Health=0;
       dead=true;
-      PlantAge[X][Y]=0;
-    } else if (PlantHealth[X][Y]>Live) PlantHealth[X][Y]=Live;
+    } else if (Health>Live) Health=Live;
   }
   boolean CheckSur(int Range, int Max, int Id, int xx, int yy)
   {
@@ -93,7 +126,7 @@ class Plant
   {
 
     TicksSinceRep++;
-    if (TicksSinceRep>=FertilityRate&&PlantHealth[X][Y]>=0.9*Live)
+    if (TicksSinceRep>=FertilityRate&&Health>=0.9*Live)
     {
       TicksSinceRep=0;
       int i=0, a=0;
@@ -133,15 +166,26 @@ class Plant
      if (InArea)
      {
      */
-    HealthIndex=floor(map(PlantHealth[X][Y], 0, Live, 9, 0));
+    HealthIndex=floor(map(Health, 0, Live, 9, 0));
     if (HealthIndexOld!=HealthIndex)
     {
       HealthIndexOld=HealthIndex;
       Vegetation.set( X*w+Randomx, Y*w+Randomy, Pic[9]);
-      Vegetation.set( X*w+ceil(HealthIndex/5)+Randomx, Y*w+ceil(HealthIndex/5)+Randomy, Pic[HealthIndex]);
+      Vegetation.set( X*w, Y*w, Pic[HealthIndex]);
     }
     // }
   }
+}
+void SavePlants(String Path)
+{
+  String[] S=new String[Plants.size()];
+  int Index=0;
+  for ( Plant P : Plants)
+  {
+    S[Index]=P.Data();
+    Index++;
+  }
+  saveStrings(Path, S);
 }
 void redrawPlants()
 {
@@ -189,7 +233,7 @@ void PlantManagment()
 
     // DebugTime=millis();
 
-    if(ShowVegetation)redrawPlants();
+    if (ShowVegetation)redrawPlants();
 
     //if (TimeDebug)println("Redraw Plants: "+str(millis()-DebugTime));
 

@@ -7,12 +7,14 @@ String WorldName="World1";
 String WorldPath=("\\Saves\\");
 
 String DataPath=("\\Data\\");
-String PlantsPath=("\\"+DataPath+"\\Plants\\");
+String PlantsPath=(DataPath+"\\Plants\\");
 String SketchPath;
-PGraphics Maps, Vegetation, OverlayPic, Weather, Mask,Stats;
+PGraphics Maps, Vegetation, OverlayPic, Weather, Mask, Stats;
 PImage   Map, Erase, Window, OverlayImg;
 ArrayList<Plant>Plants=new ArrayList<Plant>();
 ArrayList<Plant>Plants1=new ArrayList<Plant>();
+ArrayList<PlantData>LocalPlantTypes=new ArrayList<PlantData>();
+ArrayList<PlantData>GlobalPlantTypes=new ArrayList<PlantData>();
 ArrayList<PlantData>PlantTypes=new ArrayList<PlantData>();
 int   w=5, MapsZeroX, MapsZeroY, MapsZeroXF, MapsZeroYF, MapsZeroXOld, MapsZeroYOld;
 float PerlinFactor=50;
@@ -116,9 +118,9 @@ int IngameTime;
 
 
 boolean TimeDebug=false;
-int SetId=4;
+int SetId=1;
 int Maxid;
-boolean Tick, Ticked, TickEnd=true, CompEnd=true, FirstTick, OverlayReady,StatsReady;
+boolean Tick, Ticked, TickEnd=true, CompEnd=true, FirstTick, OverlayReady, StatsReady;
 boolean CheckSurounding=false; //Dont gorw next to each other
 int[] Weatherstation={0, 0};
 int Troplines=4;
@@ -126,6 +128,8 @@ boolean Multithreading=true;
 
 boolean ShowWeather=true, ShowVegetation=true;
 boolean Pause;
+
+boolean LocalPlantTypeSel=true;
 void setup()
 {
 
@@ -134,7 +138,7 @@ void setup()
   size(2000, 1000);
   frameRate(120);
   Erase=loadImage(DataPath+"Erase.png");
-  Stats=createGraphics(60,100);
+  Stats=createGraphics(60, 100);
   TPS=cp5.addTextlabel("TPS");
   //fullScreen();
   SketchPath=sketchPath();
@@ -144,11 +148,13 @@ void setup()
   DataPath=SketchPath+DataPath;
   //smooth(2);
   InitMap(true);
-  NewPlant("Tanne", 4, 0, 100, -10, 30, 100, 130, 3, 6, 100, 100);
-  NewPlant("Edelweiss", 3, 0, 30, -10, 10, 160, 175, 30, 3, 30, 100);
-  NewPlant("Lilie", 2, 0, 100, -10, 30, 100, 255, 1, 6, 100, 100);
-  NewPlant("Birke", 1, 5, 80, 0, 30, 100, 255, 30, 8, 100, 1000);
-  LoadPlantTypes();
+  /*NewPlant("Tanne", 4, 0, 100, -10, 30, 100, 130, 3, 6, 100, 100);
+   NewPlant("Edelweiss", 3, 0, 30, -10, 10, 160, 175, 30, 3, 30, 100);
+   NewPlant("Lilie", 2, 0, 100, -10, 30, 100, 255, 1, 6, 100, 100);
+   NewPlant("Birke", 1, 5, 80, 0, 30, 100, 255, 30, 8, 100, 1000);*/
+  LoadLocalPlantTypes(WorldName);
+  LoadGlobalPlantTypes();
+  //AddLocalToGlobalPlants();
   //LoadMap(WorldName);
 
   // redrawPlants();
@@ -180,7 +186,7 @@ void draw()
     if (Multithreading&&CompEnd)thread("Composite");
     else if (!Multithreading)Composite();
   }
-  if(millis()-CompTime>3000) CompEnd=true;
+  if (millis()-CompTime>3000) CompEnd=true;
 
 
   //////////////////Draw////////////////////
@@ -191,15 +197,14 @@ void draw()
   if (Map!=null&&Overlay==0)
   {
     //background(0);
-    set( MapsZeroX, MapsZeroY,Map);
-
+    set( MapsZeroX, MapsZeroY, Map);
   }
   if (Overlay!=0&&OverlayReady)
   {
     //background(0);
     set( MapsZeroX, MapsZeroY, OverlayImg);
   }
-  if(StatsReady)set(0,0,Stats);
+  if (StatsReady)set(0, 0, Stats);
   //if (Map!=null)image(Map, MapsZeroX, MapsZeroY);
 
   ///////////////////////////////////////////
@@ -221,7 +226,23 @@ void draw()
     Stats.background(0, 200);
     Stats.fill(255);
     Stats.textSize(12);
-    Stats.text("TT: "+str(TickTime)+"ms\n"+"Tps: "+str(TicksPerSecond)+"\n"+PlantTypes.get(SetId).Name+"\n Day: "+Tss*Mpt/60/24+"\n FPS: "+str(int(frameRate)), 5, 15);
+    String Sel="";
+    String PlantName=" ";
+
+    if (LocalPlantTypeSel)
+    {
+      Sel="L:";
+      if (SetId>LocalPlantTypes.size()-1)SetId=LocalPlantTypes.size()-1;
+
+      PlantName=LocalPlantTypes.get(SetId).Name;
+    } else
+    {
+      Sel="G:";
+      if (SetId>GlobalPlantTypes.size()-1)SetId=GlobalPlantTypes.size()-1;
+      PlantName=GlobalPlantTypes.get(SetId).Name;
+    }
+
+    Stats.text("TT: "+str(TickTime)+"ms\n"+"Tps: "+str(TicksPerSecond)+"\n"+Sel+PlantName+"\n Day: "+Tss*Mpt/60/24+"\n FPS: "+str(int(frameRate)), 5, 15);
     Stats.endDraw();
     StatsReady=true;
   }
@@ -235,8 +256,8 @@ void Composite()
   if (Overlay==0&&FirstTick&&Maps!=null&&Mask!=null)
   {
     Mask.set( 0, 0, Maps);
-   if(ShowVegetation)Mask.image( Vegetation, 0, 0);
-    if(ShowWeather)Mask.image( Weather, 0, 0);
+    if (ShowVegetation)Mask.image( Vegetation, 0, 0);
+    if (ShowWeather)Mask.image( Weather, 0, 0);
   }
 
   Mask.endDraw();
@@ -248,8 +269,19 @@ void Tick()
   TickEnd=false;
   if (PlantSet[0]!=0)
   {
-    Plants.add(new Plant(PlantSet[2], PlantSet[0], PlantSet[1]));
+    int Index=0, Index2=0;
+    if (!LocalPlantTypeSel)
+    {
+      Index=2000;
+    }
+
+    Plants.add(new Plant(PlantSet[2]+Index, PlantSet[0], PlantSet[1]));
     for (int i=0; i<PlantSet.length; i++)PlantSet[i]=0;
+    if (!LocalPlantTypeSel)
+    {
+      Index2=1;
+    }
+    println("Added "+LocalPlantTypes.get(SetId+Index2).Name);
   }
   StartTimeDebug();
   MapData[TssI]++;
@@ -262,12 +294,12 @@ void Tick()
   PrintTimeDebug("drawMap");
   PushWind();
   PrintTimeDebug("PushWind");
-  if(ShowWeather)DrawWeather();
+  if (ShowWeather)DrawWeather();
   PrintTimeDebug("DrawWeather");
   DrawOverlay();
   PrintTimeDebug("DrawOverlay");
   TickTime=int(millis()-TpsTime);
-  if(!FirstTick)CompTime=millis();
+  if (!FirstTick)CompTime=millis();
   FirstTick=true;
   TickEnd=true;
   EndTimeDebug();

@@ -8,7 +8,7 @@ void LoadWorld(String Name)
   InitMap(false);
   LoadMap(Name);
   createMap(false);
-  LoadPlantTypes();
+  //LoadLocalPlantTypes(Name);
   background(200);
   println("Loaded World: "+Name);
 
@@ -102,39 +102,4 @@ float[][] LoadFloatMatrix(String Name)
   }
   println("]");
   return R;
-}
-void LoadPlantTypes()
-{
-  print("LoadingPlantTypes..    ");
-  java.io.File folder = new java.io.File(PlantsPath);
-  String[] list = folder.list();
-
-
-  if (list !=null)
-  {
-
-    println("found "+str(list.length)+" Planttypes");
-    PlantTypes.add(new PlantData("0", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0));
-    Maxid=int(str(list[list.length-1].charAt(0)));
-    if (Maxid!=list.length)println("Attention! Fault in Plant Data System!");
-    for (int i=1; i<=list.length; i++)
-    {
-      println("read Plant: "+list[i-1]);
-      String[] Lines=loadStrings(PlantsPath+"\\"+list[i-1]+"\\"+list[i-1]+".txt"), word;
-      //println(list[i]);
-      if (Lines[0]!=null)
-      {
-        word=Lines[0].split(" ");
-
-        int a=0, id=int(word[1]);
-        if (id!=i)
-        {
-          println("Fault in Plant System! Added Dummie at: "+str(i));
-          PlantTypes.add(i, new PlantData("0", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0));
-        }
-
-        PlantTypes.add(id, new PlantData(word[a++], int(word[a++]), int(word[a++]), int(word[a++]), int(word[a++]), int(word[a++]), int(word[a++]), int(word[a++]), int(word[a++]), int(word[a++]), int(word[a++]), int(word[a++])));
-      } else println("Fehler beim lesen von: "+list[i]);
-    }
-  } else println("no Plants found");
 }
