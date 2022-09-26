@@ -166,11 +166,11 @@ void PrintMapData(int X, int Y)
     str(PlantHealth[X][Y])+"\n   HumiditY: "+str(Hum[X][Y]/AirVol(X, Y)*100)+"%\n   Air Moisture: "+str(Hum[X][Y])+"\n   Height over Sealvl: "+str(Elev[X][Y]-Sealvl)
     +"\n   Rain: "+str(Rain[X][Y])+"\n\n   SeaWater: "+str(MapData[SeaWaterI])+"\n  Sealevel: "+str(Sealvl));
 }
-String LokalPlantsPath()
+String LocalPlantsPath()
 {
   return (WorldPath()+"\\Plants\\");
 }
 String WorldPath()
 {
-  return SketchPath+WorldName;
+  return WorldPath+"\\"+WorldName;
 }

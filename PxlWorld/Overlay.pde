@@ -77,6 +77,26 @@ void DrawOverlay()
         }
         break;
       }
+          case 4: //Hum
+      {
+        for (int i=0; i<MapData[MapWidthI]; i++)
+        {
+          for (int a=0; a<int(MapData[MapHeightI]); a++)
+          {
+            color Fill=color(0);
+            if(CheckGround(SetId,i,a)) Fill=color(0,255,0);
+            else Fill=color(255,0,0);
+            if(PlantID[i][a]==SetId)Fill=color(0,0,255);
+             if (int(Fill)!=OverlayOld[i][a]||ReDrawOverlay)
+            {
+              OverlayOld[i][a]=int(Fill);
+              OverlayPic.fill(Fill);
+              OverlayPic.rect(i*w, a*w, w, w);
+            }
+          }
+        }
+        break;
+      }
     }
     OverlayPic.endDraw();
     OverlayImg=OverlayPic.get();

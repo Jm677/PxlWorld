@@ -30,13 +30,13 @@ void LoadMap(String Name)
   Temp=LoadFloatMatrix(path+"\\Temperatur");
   Hum=LoadFloatMatrix(path+"\\Humidity");
   GroundWater=LoadFloatMatrix(path+"\\GroundWater");
-
+  LoadPlants();
   for (int i=0; i<MapData[MapWidthI]; i++)
   {
     for (int a=0; a<int(MapData[MapHeightI]); a++)
     {
       TypeOld[i][a]=100;
-      if (PlantID[i][a]!=0)Plants.add(new Plant(PlantID[i][a], i, a));
+      //if (PlantID[i][a]!=0)Plants.add(new Plant(PlantID[i][a], i, a));
     }
   }
   //updateMapProp();

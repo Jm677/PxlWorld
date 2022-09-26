@@ -3,6 +3,7 @@ class Plant
   int X, Y, Id, GroundWaterMin, GroundWaterMax, TempMax, TempMin, HeightMax, HeightMin, FertilityRate, FertilityRadius, Toughness, Livespan;
   int Live, Age, Health;
   int TicksSinceRep, FertTrys;
+  boolean New;
   String Name, Save;
   color C;
   PImage[] Pic=new PImage[10];
@@ -11,13 +12,17 @@ class Plant
   boolean InArea=true;
   public boolean dead;
 
-  Plant(int id, int x, int y)
+  Plant(boolean NEW, int x, int y, int id, int health, int liveSpan, int age, int ticksSinceRep )
   {
+    New=NEW;
     X=x;
     Y=y;
     Id=id;
-    Randomx=round(0);
-    Randomy=round(0);
+    Health=health;
+    Age=age;
+    Livespan=liveSpan;
+    TicksSinceRep=ticksSinceRep;
+
     if (Id>=2000)
     {
       boolean There=false;
@@ -38,21 +43,22 @@ class Plant
         GlobalPlantTypes.get(Id-2000).Id=LocalPlantTypes.size();
         LocalPlantTypes.add(GlobalPlantTypes.get(Id-2000));
         Id=LocalPlantTypes.size()-1;
-      
-      }
-      else
+        SaveGlobalPlantTypeToLocal(id-2000, LocalPlantsPath());
+      } else
       {
         Id=PlantIndex;
-        LocalPlantTypeSel=true;
-        SetId=Id;
+
+
         println(LocalPlantTypes.get(SetId).Name);
       }
+      SetId=Id;
+      LocalPlantTypeSel=true;
     }
     loadData();
   }
   String Data()
   {
-    return(str(X)+" "+str(Y)+" "+str(Id)+" "+str(Health)+" "+str(Live)+" "+str(Age)+" "+str(Livespan)+" "+str(TicksSinceRep));
+    return(str(X)+" "+str(Y)+" "+str(Id)+" "+str(Health)+" "+str(Age)+" "+str(Livespan)+" "+str(TicksSinceRep));
   }
   void loadData()
   {
@@ -67,10 +73,16 @@ class Plant
     FertilityRate=P.FertilityRate;
     FertilityRadius=P.FertilityRadius;
     Live=P.Live;
-    Livespan=round(random(1-LivespanVariation, 1+LivespanVariation)*P.Livespan);
-    TicksSinceRep=int(random(0, 1)*FertilityRate);
+    if (New)
+    {
+      Livespan=round(random(1-LivespanVariation, 1+LivespanVariation)*P.Livespan);
+      Age=0;
+      Health=Live/10;
+      TicksSinceRep=int(random(0, 1)*FertilityRate);
+    }
+
     Pic=P.Pic;
-    
+
 
     if (PlantHealth[X][Y]==0)PlantHealth[X][Y]=Live;
     // println(PlantAge[X][Y],PlantHealth[X][Y]);
@@ -97,6 +109,7 @@ class Plant
       dead=true;
     } else if (Health>Live) Health=Live;
   }
+  
   boolean CheckSur(int Range, int Max, int Id, int xx, int yy)
   {
     boolean Search;
@@ -143,7 +156,7 @@ class Plant
         FertTrys++;
         PlantID[X][Y]=Id;
         PlantAge[X][Y]=0;
-        Plants1.add(new Plant(Id, X+i, Y+a));
+        Plants1.add(new Plant(true, X+i, Y+a, Id, 0, 0, 0, 0));
 
         // Vegetation.beginDraw();
         // display();
@@ -174,6 +187,18 @@ class Plant
       Vegetation.set( X*w, Y*w, Pic[HealthIndex]);
     }
     // }
+  }
+}
+void LoadPlants()
+{
+  print("LoadPlants");
+  String[] word;
+  String[] Lines=loadStrings(WorldPath()+"\\PlantData.txt");
+  for (int i=0; i<Lines.length; i++)
+  {
+    int a=0;
+    word=Lines[i].split(" ");
+    Plants.add(new Plant(false, int(word[a++]), int(word[a++]), int(word[a++]), int(word[a++]), int(word[a++]), int(word[a++]), int(word[a++])));
   }
 }
 void SavePlants(String Path)

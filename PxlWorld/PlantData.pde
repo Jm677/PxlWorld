@@ -38,19 +38,27 @@ class PlantData
     Id=id;
   }
 
-  String getData(boolean SetIdToZero)
+  String getData(boolean ChangeID, int idd)
   {
-    int idd=0;
-    if (!SetIdToZero)idd=Id;
+    
+    if (!ChangeID)idd=Id;
+
 
     return Name+" "+str(idd)+" "+str(GroundWaterMin)+" "+str(GroundWaterMax)+" "+str(TempMin)+" "+str(TempMax)+" "+str(HeightMin)+" "+str(HeightMax)+" "+str(FertilityRate)+" "+str(FertilityRadius)+" "+str(Live)+" "+str(Livespan);
   }
 }
+ boolean CheckGround(int Id,int i, int a) 
+  {
+    PlantData P=LocalPlantTypes.get(Id);
+    if(SecType[i][a]!=1&&GroundWater[i][a]>=P.GroundWaterMin&&GroundWater[i][a]<=P.GroundWaterMax&&Temp[i][Y]>=P.TempMin&&Temp[i][a]<=P.TempMax&&Elev[i][a]>=P.HeightMin&&Elev[i][a]<=P.HeightMax)
+    return true;
+    else return false;
+  }
 void NewPlant(String Name, int id, int moistMin, int moistMax, int tempMin, int tempMax, int heightMin, int heightMax, int fertilityRate, int fertilityRadius, int live, int livespan)
 {
 
   String S[]={Name+" "+str(id)+" "+str(moistMin)+" "+str(moistMax)+" "+str(tempMin)+" "+str(tempMax)+" "+str(heightMin)+" "+str(heightMax)+" "+str(fertilityRate)+" "+str(fertilityRadius)+" "+str(live)+" "+str(livespan)};
-  saveStrings(LokalPlantsPath()+"\\"+str(id)+Name+"\\"+Name+".txt", S);
+  saveStrings(LocalPlantsPath()+"\\"+str(id)+Name+"\\"+Name+".txt", S);
 }
 void LoadLocalPlantTypes(String Name)
 {
@@ -60,7 +68,7 @@ void LoadLocalPlantTypes(String Name)
   String[] list = folder.list();
 
 
-  if (list !=null)
+  if (list.length>0)
   {
     PImage pic;
     println("found "+str(list.length)+" Planttypes in : "+Path);
@@ -86,7 +94,11 @@ void LoadLocalPlantTypes(String Name)
         LocalPlantTypes.add(id, new PlantData(word[a++], int(word[a++]), int(word[a++]), int(word[a++]), int(word[a++]), int(word[a++]), int(word[a++]), int(word[a++]), int(word[a++]), int(word[a++]), int(word[a++]), int(word[a++]), pic));
       } else println("Fehler beim lesen von: "+list[i]);
     }
-  } else println("no Plants found");
+  } else
+  {
+    println("no Plants found");
+    LocalPlantTypeSel=false;
+  }
   PlantTypes.addAll(LocalPlantTypes);
 }
 void LoadGlobalPlantTypes()
@@ -131,7 +143,7 @@ void SaveLocalPlants(String path)
     }
   }
 }
-void LoadLokalPlantsToGlobal(int Id, String Path)
+void SaveLocalPlantType(int Id, String Path)
 {
 
 
@@ -166,12 +178,60 @@ void LoadLokalPlantsToGlobal(int Id, String Path)
     }
     if (There) println("Name already occupied");
     else {
+      
       PlantData P=LocalPlantTypes.get(Id);
       P.Pic[0].save(plantPath+"\\"+Name+".png");
       String S[]=new String[1];
-      S[0]=P.getData(true);
+      S[0]=P.getData(true,0);
       println(S[0]);
       saveStrings(plantPath+"\\"+Name+".txt", S);
+      println("Saved: "+Name);
+    }
+  } else println("no Plants found");
+}
+void SaveGlobalPlantTypeToLocal(int Id, String Path)
+{
+
+
+
+  java.io.File Global = new java.io.File(Path);
+
+  String[] GlobalList = Global.list();
+  boolean There=false;
+  String Name=GlobalPlantTypes.get(Id).Name;
+  String plantPath=Path+Name;
+  println("Saving local PlantType: "+Name+" to: "+plantPath);
+  if (GlobalList !=null)
+  {
+
+    println("found "+str(GlobalList.length)+" Planttypes in : "+Path);
+
+    for (int i=0; i<GlobalList.length; i++)
+    {
+      //println("read Plant: "+GlobalList[i]);
+      String[] Lines=loadStrings(Path+"\\"+GlobalList[i]+"\\"+GlobalList[i]+".txt"), word;
+      if (Lines[0]!=null)
+      {
+        word=Lines[0].split(" ");
+        println(word[0], Name);
+        if (word[0].equals(Name))
+        {
+
+          There=true;
+          break;
+        }
+      } else println("Fehler beim lesen von: "+GlobalList[i]);
+    }
+    if (There) println("Name already occupied");
+    else {
+      int ID=GlobalList.length+1;
+      PlantData P=GlobalPlantTypes.get(Id);
+      P.Pic[0].save(Path+"\\"+str(ID)+" "+Name+"\\"+str(ID)+" "+Name+".png");
+      String S[]=new String[1];
+      S[0]=P.getData(true,ID);
+      println(S[0]);
+      saveStrings(Path+"\\"+str(ID)+" "+Name+"\\"+str(ID)+" "+Name+".txt", S);
+      println("Saved: "+Name);
     }
   } else println("no Plants found");
 }

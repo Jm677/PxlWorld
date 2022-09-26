@@ -42,7 +42,7 @@ float[] MapData={MapWidth, MapHeight, Dirtlvl, SeaWater, Sun, Wind[0], Wind[1], 
 
 int[] CountTypes=new int[7]; ///Increase when adding new Type!!!
 // 0=nothing, 1=Dirt, 2=EStone, 3=Empty, 4=Empty,5=Empty, 6=Empty
-float DrainFactor=0.01/*0.01*/, VapoFactor=0.05/*0.1*/, VolumeFactor=30, SunFactor=0.1, EmissionFactor=0.07;                                           ///increase/decrease influence of Vapor and Drain
+float DrainFactor=0.01/*0.01*/, VapoFactor=0.05/*0.1*/, VolumeFactor=30, SunFactor=0.1, EmissionFactor=0.1;                                           ///increase/decrease influence of Vapor and Drain
 float WaterVolAir= 0.1*VolumeFactor;       //Max Water in Air at 20 °C; 0 at -18°C;
 int SmoothTickRate=10;
 float SmoothFactor=SmoothTickRate; //Compensation for Smoothfunc beeing called only 10th tick
@@ -124,7 +124,7 @@ boolean Tick, Ticked, TickEnd=true, CompEnd=true, FirstTick, OverlayReady, Stats
 boolean CheckSurounding=false; //Dont gorw next to each other
 int[] Weatherstation={0, 0};
 int Troplines=4;
-boolean Multithreading=true;
+boolean Multithreading=false;
 
 boolean ShowWeather=true, ShowVegetation=true;
 boolean Pause;
@@ -228,7 +228,7 @@ void draw()
     Stats.textSize(12);
     String Sel="";
     String PlantName=" ";
-
+    
     if (LocalPlantTypeSel)
     {
       Sel="L:";
@@ -275,12 +275,8 @@ void Tick()
       Index=2000;
     }
 
-    Plants.add(new Plant(PlantSet[2]+Index, PlantSet[0], PlantSet[1]));
+    Plants.add(new Plant( true, PlantSet[0], PlantSet[1],PlantSet[2]+Index,0,0,0,0));
     for (int i=0; i<PlantSet.length; i++)PlantSet[i]=0;
-    if (!LocalPlantTypeSel)
-    {
-      Index2=1;
-    }
     println("Added "+LocalPlantTypes.get(SetId+Index2).Name);
   }
   StartTimeDebug();

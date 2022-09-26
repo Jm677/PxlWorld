@@ -90,6 +90,11 @@ void keyPressed()
       Overlay=3;
       break;
     }
+    case'.':
+    {
+      Overlay=4;
+      break;
+    }
 
   case 'l':
     {
@@ -108,7 +113,7 @@ void keyPressed()
     }
      case 'S':
     {
-      LoadLokalPlantsToGlobal(SetId,PlantsPath);
+      SaveLocalPlantType(SetId,PlantsPath);
       break;
     }
   }

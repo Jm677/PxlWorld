@@ -252,7 +252,7 @@ void CalcTemp()
     {
       int E=Elev[i][a];
       if (E<Sealvl)E=Sealvl;
-      float Flux=(SunAbs[Type[i][a]]*map(SunFlux(i, a), 0, 1000, 0, 1)*map(Elev[i][a], Sealvl, MaxElev, 1, 0))-StdEm[Type[i][a]]*map(Temp[i][a], -18, 50, 0, 1);
+      float Flux=(SunAbs[Type[i][a]]*map(SunFlux(i, a), 0, 500, 0, 1)*map(Elev[i][a], Sealvl, MaxElev, 1, 0))-StdEm[Type[i][a]]*map(Temp[i][a], -18,20, 0, 1);
       Temp[i][a]+=Flux;
     }
   }
