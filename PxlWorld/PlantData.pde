@@ -68,7 +68,7 @@ void LoadLocalPlantTypes(String Name)
   String[] list = folder.list();
 
 
-  if (list.length>0)
+  if (folder.list().length>0&&list.length>0)
   {
     PImage pic;
     println("found "+str(list.length)+" Planttypes in : "+Path);

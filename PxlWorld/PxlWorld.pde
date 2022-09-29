@@ -124,7 +124,7 @@ boolean Tick, Ticked, TickEnd=true, CompEnd=true, FirstTick, OverlayReady, Stats
 boolean CheckSurounding=false; //Dont gorw next to each other
 int[] Weatherstation={0, 0};
 int Troplines=4;
-boolean Multithreading=false;
+boolean Multithreading=true;
 
 boolean ShowWeather=true, ShowVegetation=true;
 boolean Pause;
