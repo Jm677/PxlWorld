@@ -4,7 +4,7 @@ import java.io.FileFilter;
 ControlP5 cp5;
 boolean Debug=false;
 String WorldName="World1";
-String WorldPath=("\\Saves\\");
+String WorldPath=("\\Saves\\"); 
 
 String DataPath=("\\Data\\");
 String PlantsPath=(DataPath+"\\Plants\\");
@@ -135,12 +135,12 @@ void setup()
 
   cp5=new ControlP5(this);
   if (Tps<CompositeTps)CompositeTps=Tps;
-  size(2000, 1000);
+  //size(2000, 1000);
   frameRate(120);
   Erase=loadImage(DataPath+"Erase.png");
   Stats=createGraphics(60, 100);
   TPS=cp5.addTextlabel("TPS");
-  //fullScreen();
+  fullScreen();
   SketchPath=sketchPath();
   println(SketchPath);
   WorldPath=SketchPath+WorldPath;
