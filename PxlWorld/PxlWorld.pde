@@ -154,6 +154,7 @@ void setup()
    NewPlant("Birke", 1, 5, 80, 0, 30, 100, 255, 30, 8, 100, 1000);*/
   LoadLocalPlantTypes(WorldName);
   LoadGlobalPlantTypes();
+  InitGui();
   //AddLocalToGlobalPlants();
   //LoadMap(WorldName);
 

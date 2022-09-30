@@ -4,6 +4,7 @@ class PlantData
   int Id, GroundWaterMin, GroundWaterMax, TempMin, TempMax, HeightMin, HeightMax, FertilityRate, FertilityRadius, Live, Livespan;
   color C;
   PImage[] Pic=new PImage[10];
+  PImage PIC;
   PlantData(String name, int id, int moistMin, int moistMax, int tempMin, int tempMax, int heightMin, int heightMax, int fertilityRate, int fertilityRadius, int live, int livespan, PImage pic)
   {
     if (name!="0")
@@ -11,8 +12,9 @@ class PlantData
       //println("new Plant was added: "+name);
       println("new Plant was added:  \n Name: "+name+"\n Id: "+str(id)+"\n GroundWater: "+str(moistMin)+"-"+str(moistMax)+"\n Temp: "+str(tempMin)+"-"+str(tempMax)+
         "\n Height: "+str(heightMin)+"-"+str(heightMax)+"\n FertilityRate: "+str(fertilityRate)+"\n FertilityRadius: "+str(fertilityRadius)+"\n Live: "+str(live)+"\n Livespan: "+str(Livespan));
-      Pic[0]=pic;
+      Pic[0]=pic.get();
       Pic[0].resize(w, w);
+      PIC=pic.get();
       if (Pic!=null)
       {
         println(" Picture loaded!");
