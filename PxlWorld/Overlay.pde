@@ -77,7 +77,7 @@ void DrawOverlay()
         }
         break;
       }
-          case 4: //Hum
+          case 4: //Plant
       {
         for (int i=0; i<MapData[MapWidthI]; i++)
         {

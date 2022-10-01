@@ -164,7 +164,7 @@ void CalcRain()
   {
     for (int a=0; a<MapData[MapHeightI]; a++)
     {
-      float Avr=RainRate*map(Hum[i][a]/AirVol(i, a), 0, 2, 0, 1);
+      float Avr=RainRate*map(Hum[i][a]/AirVol(i, a), 0, 1.5, 0, 1);
       if (Rain[i][a])
       {
         Hum[i][a]-=Avr;

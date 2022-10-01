@@ -86,7 +86,9 @@ void drawMap()
     }
     // println(millis()-Time);
 
-    Maps.endDraw();
+   Maps.endDraw();
+
+   
     //  Map=Maps.get(0,0,width,height);
     //Map.resize(int(MapWidth*Zoom), int(int(MapData[1])*Zoom));
     //image(Map,MapsZeroX, MapsZeroY, width,height);

@@ -42,7 +42,7 @@ float[] MapData={MapWidth, MapHeight, Dirtlvl, SeaWater, Sun, Wind[0], Wind[1], 
 
 int[] CountTypes=new int[7]; ///Increase when adding new Type!!!
 // 0=nothing, 1=Dirt, 2=EStone, 3=Empty, 4=Empty,5=Empty, 6=Empty
-float DrainFactor=0.01/*0.01*/, VapoFactor=0.05/*0.1*/, VolumeFactor=30, SunFactor=0.1, EmissionFactor=0.1;                                           ///increase/decrease influence of Vapor and Drain
+float DrainFactor=0.01/*0.01*/, VapoFactor=0.02/*0.1*/, VolumeFactor=30, SunFactor=0.1, EmissionFactor=0.1;                                           ///increase/decrease influence of Vapor and Drain
 float WaterVolAir= 0.1*VolumeFactor;       //Max Water in Air at 20 °C; 0 at -18°C;
 int SmoothTickRate=10;
 float SmoothFactor=SmoothTickRate; //Compensation for Smoothfunc beeing called only 10th tick
@@ -77,8 +77,8 @@ int WaterTempInf=0; //influence Water on Temp
 float DesertGroundWater=0.1, DesertTemp=35; //Moisture for Desert
 /////////////////////////////////////////
 
-float RainRate=0.05;
-float RainEnd=0.6, RainStart=1.7;
+float RainRate=0.2;
+float RainEnd=0.3, RainStart=1.4;
 int[] WaterPerLayer;//Shows place for Water per Layer
 int[][][] DataInt;
 int Elev[][];
@@ -205,7 +205,7 @@ void draw()
     //background(0);
     set( MapsZeroX, MapsZeroY, OverlayImg);
   }
-  if (StatsReady)set(0, 0, Stats);
+  if (StatsReady)set(width-Stats.width, 0, Stats);
   //if (Map!=null)image(Map, MapsZeroX, MapsZeroY);
 
   ///////////////////////////////////////////

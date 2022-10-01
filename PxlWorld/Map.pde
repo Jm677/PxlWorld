@@ -22,7 +22,7 @@ void ResetWorldData()
   SecTypeOld=new int[int(MapData[MapWidthI])][int(MapData[MapHeightI])];//not Saved
   TypeOld=new int[int(MapData[MapWidthI])][int(MapData[MapHeightI])];//not Saved
   OverlayOld=new int[int(MapData[MapWidthI])][int(MapData[MapHeightI])];//not Saved
-
+  WeatherOld=new color[int(MapData[MapWidthI])][int(MapData[MapHeightI])];//not Saved
 }
 void InitMap(boolean NewWorld)
 {
@@ -78,10 +78,9 @@ void createMap(boolean NewWorld)
 void updateMapProp()
 {
   CalcTemp();
-  if(MapData[TssI]%10==0)CalcSealvl();
+  if (MapData[TssI]%10==0)CalcSealvl();
   CalcGroundWater();
   CalcRain();
-  if(MapData[TssI]%SmoothTickRate==0)CalcSmoothing();
-  if(MapData[TssI]%10==0)CalcSecTypes();
-
+  if (MapData[TssI]%SmoothTickRate==0)CalcSmoothing();
+  if (MapData[TssI]%10==0)CalcSecTypes();
 }

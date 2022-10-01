@@ -52,7 +52,7 @@ class PlantData
  boolean CheckGround(int Id,int i, int a) 
   {
     PlantData P=LocalPlantTypes.get(Id);
-    if(SecType[i][a]!=1&&GroundWater[i][a]>=P.GroundWaterMin&&GroundWater[i][a]<=P.GroundWaterMax&&Temp[i][Y]>=P.TempMin&&Temp[i][a]<=P.TempMax&&Elev[i][a]>=P.HeightMin&&Elev[i][a]<=P.HeightMax)
+    if(SecType[i][a]!=1&&GroundWater[i][a]>=P.GroundWaterMin&&GroundWater[i][a]<=P.GroundWaterMax&&Temp[i][a]>=P.TempMin&&Temp[i][a]<=P.TempMax&&Elev[i][a]>=P.HeightMin&&Elev[i][a]<=P.HeightMax)
     return true;
     else return false;
   }

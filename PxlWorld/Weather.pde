@@ -13,8 +13,10 @@ float AirVol(int i, int a)
   return A;
 }
 
+color[][] WeatherOld;
 void DrawWeather()
 {
+
   //Weather.smooth(5);
   Weather.beginDraw();
   //Weather.clear();
@@ -26,19 +28,28 @@ void DrawWeather()
     for (int a=0; a<int(MapData[MapHeightI]); a++)
     {
       float Av=AirVol(i, a);
+      color Fill;
       if (abs(HumOld[i][a]-Hum[i][a]/Av)>=0.2)
       {
         Weather.set(i*w,a*w,Erase);
         HumOld[i][a]=Hum[i][a]/Av;
         H=Hum[i][a]/Av;
         if (H>2)H=2;
-        Weather.fill(map(H, 1, 2, 255, 100), map(H, 1, 2, 130, 230));
-        Weather.rect(i*w, a*w, w, w);
+    
+        if(H>1)Fill=color(map(H, 1, 2, 255, 100), map(H, 1, 2, 130, 230));
+        else Fill=color(255,0);
+        if(Fill!=WeatherOld[i][a])
+        {
+          Weather.fill(Fill);
+          WeatherOld[i][a]=Fill;
+          Weather.rect(i*w, a*w, w, w);
+        }
       }
     }
   }
   
   Weather.endDraw();
+  
   //Weather.filter(BLUR);
   
 }
