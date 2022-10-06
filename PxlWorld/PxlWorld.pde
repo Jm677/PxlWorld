@@ -4,7 +4,7 @@ import java.io.FileFilter;
 ControlP5 cp5;
 boolean Debug=false;
 String WorldName="World1";
-String WorldPath=("\\Saves\\"); 
+String WorldPath=("\\Saves\\");
 
 String DataPath=("\\Data\\");
 String PlantsPath=(DataPath+"\\Plants\\");
@@ -110,7 +110,9 @@ long TpsTime, CompTime, DebugTime;
 long Time;
 int TickTime;
 Textlabel TPS;
+int TPSValue;
 int TicksPerSecondCounter;
+float MinTPS=1, MaxTPS=35;
 
 int CompositeTps=5;
 int Mpt=60; //Ingame Minutes per Tick
@@ -118,7 +120,7 @@ int IngameTime;
 
 
 boolean TimeDebug=false;
-int SetId=1;
+int SetId=0;
 int Maxid;
 boolean Tick, Ticked, TickEnd=true, CompEnd=true, FirstTick, OverlayReady, StatsReady;
 boolean CheckSurounding=false; //Dont gorw next to each other
@@ -130,6 +132,9 @@ boolean ShowWeather=true, ShowVegetation=true;
 boolean Pause;
 
 boolean LocalPlantTypeSel=true;
+int WindowMinX, WindowMinY, WindowMaxX, WindowMaxY;
+
+int PlantTime, WeatherTime, WTime,PTime;
 void setup()
 {
 
@@ -167,8 +172,10 @@ void draw()
   //SeaWater+=100000;
 
   ////////////////////Tick///////////////////////////////////
-  if (!Pause&&millis()-TpsTime>=1000/MapData[TpsI]&&TickEnd)
+  if (!Pause&&millis()-TpsTime>=920/MapData[TpsI]&&TickEnd)
   {
+
+
     TpsTime=millis();
 
     if (TickEnd&&Multithreading)
@@ -179,6 +186,7 @@ void draw()
     {
       Tick();
     }
+    updateGuiValues();
   }
   /////////////////////////////////////////////////////
   if (!Pause&&millis()-CompTime>1000/CompositeTps&&FirstTick)
@@ -229,7 +237,7 @@ void draw()
     Stats.textSize(12);
     String Sel="";
     String PlantName=" ";
-    
+
     if (LocalPlantTypeSel)
     {
       Sel="L:";
@@ -243,7 +251,7 @@ void draw()
       PlantName=GlobalPlantTypes.get(SetId).Name;
     }
 
-    Stats.text("TT: "+str(TickTime)+"ms\n"+"Tps: "+str(TicksPerSecond)+"\n"+Sel+PlantName+"\n Day: "+Tss*Mpt/60/24+"\n FPS: "+str(int(frameRate)), 5, 15);
+    Stats.text("TT: "+str(TickTime)+"ms\n"+"Tps: "+str(TicksPerSecond)+"\n"+Sel+PlantName+"\n Day: "+MapData[TssI]*Mpt/60/24+"\n FPS: "+str(int(frameRate)), 5, 15);
     Stats.endDraw();
     StatsReady=true;
   }
@@ -257,7 +265,9 @@ void Composite()
   if (Overlay==0&&FirstTick&&Maps!=null&&Mask!=null)
   {
     Mask.set( 0, 0, Maps);
+
     if (ShowVegetation)Mask.image( Vegetation, 0, 0);
+
     if (ShowWeather)Mask.image( Weather, 0, 0);
   }
 
@@ -267,6 +277,15 @@ void Composite()
 }
 void Tick()
 {
+  WindowMinX=floor(-MapsZeroX/w);
+  WindowMinY=floor(-MapsZeroY/w);
+  WindowMaxX=floor(WindowMinX+width/w);
+  WindowMaxY=floor(WindowMinY+height/w);
+  if(WindowMaxX>=MapData[MapWidthI])WindowMaxX=int(MapData[MapWidthI]-1);
+  if(WindowMinX<0)WindowMinX=0;
+  if(WindowMaxY>=MapData[MapHeightI])WindowMaxY=int(MapData[MapHeightI]-1);
+  if(WindowMinY<0)WindowMinY=0;
+  //println(WindowMinX, WindowMinY,WindowMaxX, WindowMaxY);
   TickEnd=false;
   if (PlantSet[0]!=0)
   {
@@ -276,7 +295,7 @@ void Tick()
       Index=2000;
     }
 
-    Plants.add(new Plant( true, PlantSet[0], PlantSet[1],PlantSet[2]+Index,0,0,0,0));
+    Plants.add(new Plant( true, PlantSet[0], PlantSet[1], PlantSet[2]+Index, 0, 0, 0, 0));
     for (int i=0; i<PlantSet.length; i++)PlantSet[i]=0;
     println("Added "+LocalPlantTypes.get(SetId+Index2).Name);
   }
@@ -291,7 +310,11 @@ void Tick()
   PrintTimeDebug("drawMap");
   PushWind();
   PrintTimeDebug("PushWind");
+
+  WTime=millis();
   if (ShowWeather)DrawWeather();
+  WeatherTime=millis()-WTime;
+  
   PrintTimeDebug("DrawWeather");
   DrawOverlay();
   PrintTimeDebug("DrawOverlay");

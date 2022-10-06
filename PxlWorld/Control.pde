@@ -90,7 +90,7 @@ void keyPressed()
       Overlay=3;
       break;
     }
-    case'.':
+  case'.':
     {
       Overlay=4;
       break;
@@ -111,9 +111,9 @@ void keyPressed()
       LocalPlantTypeSel=false;
       break;
     }
-     case 'S':
+  case 'S':
     {
-      SaveLocalPlantType(SetId,PlantsPath);
+      SaveLocalPlantType(SetId, PlantsPath);
       break;
     }
   }
@@ -140,7 +140,7 @@ void mouseReleased()
   } else if (mouseButton==RIGHT)
   {
 
-    if (PlantID[X][Y]==0)
+    if (PlantID[X][Y]==0&&SetId!=0)
     {
       PlantSet[0]=X;
       PlantSet[1]=Y;
@@ -159,47 +159,49 @@ void mousePressed()
 }
 void mouseDragged()
 {
-
-  if (mouseButton==LEFT)
+  if (!cp5.isMouseOver())
   {
-    if (abs(MapsZeroX)<=Maps.width-width)
+    if (mouseButton==LEFT)
     {
-      MapsZeroX+=mouseX-DragStartX;
-      MapsZeroXF+=mouseX-DragStartX;
-      DragStartX=mouseX;
-    } else
-    {
-      MapsZeroX=-Maps.width+width;
-    }
-    if (abs(MapsZeroY)<=Maps.height-height)
-    {
-      MapsZeroY+=mouseY-DragStartY;
-      MapsZeroYF+=mouseY-DragStartY;
-      DragStartY=mouseY;
-    } else
-    {
-      MapsZeroY=-Maps.height+height;
-    }
+      if (abs(MapsZeroX)<=Maps.width-width)
+      {
+        MapsZeroX+=mouseX-DragStartX;
+        MapsZeroXF+=mouseX-DragStartX;
+        DragStartX=mouseX;
+      } else
+      {
+        MapsZeroX=-Maps.width+width;
+      }
+      if (abs(MapsZeroY)<=Maps.height-height)
+      {
+        MapsZeroY+=mouseY-DragStartY;
+        MapsZeroYF+=mouseY-DragStartY;
+        DragStartY=mouseY;
+      } else
+      {
+        MapsZeroY=-Maps.height+height;
+      }
 
 
 
-    if (MapsZeroY>0)MapsZeroY=0;
-    if (MapsZeroX>0)MapsZeroX=0;
-    if (MapsZeroYF>0)MapsZeroYF=0;
-    if (MapsZeroXF>0)MapsZeroXF=0;
-    if (abs(MapsZeroXOld-MapsZeroX)>w||abs(MapsZeroYOld-MapsZeroY)>w)
-    {
-      // background(0);
-      MapsZeroXOld=MapsZeroX;
-      MapsZeroYOld=MapsZeroY;
-      //set( MapsZeroX, MapsZeroY, Maps);
+      if (MapsZeroY>0)MapsZeroY=0;
+      if (MapsZeroX>0)MapsZeroX=0;
+      if (MapsZeroYF>0)MapsZeroYF=0;
+      if (MapsZeroXF>0)MapsZeroXF=0;
+      if (abs(MapsZeroXOld-MapsZeroX)>w||abs(MapsZeroYOld-MapsZeroY)>w)
+      {
+        // background(0);
+        MapsZeroXOld=MapsZeroX;
+        MapsZeroYOld=MapsZeroY;
+        //set( MapsZeroX, MapsZeroY, Maps);
+      }
+      MAXX=(width-MapsZeroX)/w;
+      MAXY=(height-MapsZeroY)/w;
+      MINX=(-MapsZeroX)/w;
+      MINY=(-MapsZeroY)/w;
+      //println(MINX,MINY,MAXX,MAXY);
+      //println(MapsZeroX, MapsZeroY);
     }
-    MAXX=(width-MapsZeroX)/w;
-    MAXY=(height-MapsZeroY)/w;
-    MINX=(-MapsZeroX)/w;
-    MINY=(-MapsZeroY)/w;
-    //println(MINX,MINY,MAXX,MAXY);
-    //println(MapsZeroX, MapsZeroY);
   }
 }
 void mouseWheel(MouseEvent event) {

@@ -109,7 +109,7 @@ class Plant
       dead=true;
     } else if (Health>Live) Health=Live;
   }
-  
+
   boolean CheckSur(int Range, int Max, int Id, int xx, int yy)
   {
     boolean Search;
@@ -255,12 +255,10 @@ void PlantManagment()
     }
 
 
-
-    // DebugTime=millis();
-
+    PTime=millis();
     if (ShowVegetation)redrawPlants();
+    PlantTime=millis()-PTime;
 
-    //if (TimeDebug)println("Redraw Plants: "+str(millis()-DebugTime));
 
     if (Plants.size()>0)
     {

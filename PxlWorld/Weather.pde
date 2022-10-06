@@ -23,9 +23,9 @@ void DrawWeather()
   Weather.noStroke();
 
   float H=0;
-  for (int i=0; i<MapData[MapWidthI]; i++)
+  for (int i=WindowMinX; i<WindowMaxX; i++)
   {
-    for (int a=0; a<int(MapData[MapHeightI]); a++)
+    for (int a=WindowMinY; a<WindowMaxY; a++)
     {
       float Av=AirVol(i, a);
       color Fill;
@@ -41,7 +41,6 @@ void DrawWeather()
         if(Fill!=WeatherOld[i][a])
         {
           Weather.fill(Fill);
-          WeatherOld[i][a]=Fill;
           Weather.rect(i*w, a*w, w, w);
         }
       }
@@ -51,6 +50,7 @@ void DrawWeather()
   Weather.endDraw();
   
   //Weather.filter(BLUR);
+ 
   
 }
 long[] LastPush=new long[2];
