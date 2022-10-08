@@ -1,4 +1,4 @@
-import controlP5.*;
+ import controlP5.*;
 import java.util.List;
 import java.io.FileFilter;
 ControlP5 cp5;
@@ -42,17 +42,17 @@ float[] MapData={MapWidth, MapHeight, Dirtlvl, SeaWater, Sun, Wind[0], Wind[1], 
 
 int[] CountTypes=new int[7]; ///Increase when adding new Type!!!
 // 0=nothing, 1=Dirt, 2=EStone, 3=Empty, 4=Empty,5=Empty, 6=Empty
-float DrainFactor=0.01/*0.01*/, VapoFactor=0.02/*0.1*/, VolumeFactor=30, SunFactor=0.1, EmissionFactor=0.1;                                           ///increase/decrease influence of Vapor and Drain
+float DrainFactor=0.001/*0.01*/, VapoFactor=0.05/*0.1*/, VolumeFactor=30, SunFactor=0.1, EmissionFactor=0.1;                                           ///increase/decrease influence of Vapor and Drain
 float WaterVolAir= 0.1*VolumeFactor;       //Max Water in Air at 20 °C; 0 at -18°C;
 int SmoothTickRate=10;
 float SmoothFactor=SmoothTickRate; //Compensation for Smoothfunc beeing called only 10th tick
-float TempSmooth=0.0005*SmoothFactor, HumSmooth=0.01*SmoothFactor, GroundWaterSmooth=0.01*SmoothFactor;
+float TempSmooth=0.0005*SmoothFactor, HumSmooth=0.01*SmoothFactor, GroundWaterSmooth=0*SmoothFactor;
 
 ///For SecType
 // 0=nothing, 1=Water, 2=Snow, 3=Ice, 4=Empty,5=Empty, 6=Empty
-float[] SecWaterDrain={0, 1, 0, 0.1, 0, 0.1, 0};                                                                                                   //Water that runs back to Sea per Tick and in relation to Elevation.
-float[] SecWaterVapo={0, 0.6, 0, 0.7, 0, 0.8, 1};                                                                                                 //Water that Vaporizes per Tick at 20°C
-float[] SecSunAbs={0, 1*SunFactor, 1*SunFactor, 1*SunFactor, 1*SunFactor, 1*SunFactor, 0.8*SunFactor};                                                //Sun Absorbtion[°C*Elev/(SunFlux*Tick)]
+float[] SecWaterDrain={0, 0, 0, 0.1, 0, 0.1, 0};                                                                                                   //Water that runs back to Sea per Tick and in relation to Elevation.
+float[] SecWaterVapo={0, 1, 0.1, 0.7, 0, 0.8, 1};                                                                                                 //Water that Vaporizes per Tick at 20°C
+float[] SecSunAbs={0, 1*SunFactor, 0.1*SunFactor, 1*SunFactor, 1*SunFactor, 1*SunFactor, 0.8*SunFactor};                                                //Sun Absorbtion[°C*Elev/(SunFlux*Tick)]
 float[] SecWaterVol={0, 0.4*VolumeFactor, 0.8*VolumeFactor, 0.4*VolumeFactor, 1*VolumeFactor, 0.01*VolumeFactor, 1*VolumeFactor};                  //WatterVolume in T Absolut (Water is Multiplied by Sealvl-MinElev)
 float[] SecStdEm={0, 1*EmissionFactor, 1*EmissionFactor, 1*EmissionFactor, 1*EmissionFactor, 1*EmissionFactor, 1*EmissionFactor};                     //Standard Energie Emssion [°C/Tick]
 
@@ -60,10 +60,10 @@ float[] SecStdEm={0, 1*EmissionFactor, 1*EmissionFactor, 1*EmissionFactor, 1*Emi
 
 //For GroundType
 // 0=nothing, 1=Dirt, 2=Stone, 3=Empty, 4=Empty,5=Empty, 6=Empty
-float[] WaterDrain={0, 1, 0, 0.1, 0, 0.1, 0};                                                                                                   //Water that runs back to Sea per Tick and in relation to Elevation.
-float[] WaterVapo={0, 0.6, 0, 0.7, 0, 0.8, 1};                                                                                                 //Water that Vaporizes per Tick at 20°C
+float[] WaterDrain={0, 0.5, 1, 0.1, 0, 0.1, 0};                                                                                                   //Water that runs back to Sea per Tick and in relation to Elevation.
+float[] WaterVapo={0, 0.5, 1, 0.7, 0, 0.8, 1};                                                                                                 //Water that Vaporizes per Tick at 20°C
 float[] SunAbs={0, 1*SunFactor, 1*SunFactor, 1*SunFactor, 1*SunFactor, 1*SunFactor, 0.8*SunFactor};                                                //Sun Absorbtion[°C*Elev/(SunFlux*Tick)]
-float[] WaterVol={0, 0.4*VolumeFactor, 0.8*VolumeFactor, 0.4*VolumeFactor, 1*VolumeFactor, 0.01*VolumeFactor, 1*VolumeFactor};                  //WatterVolume in T Absolut (Water is Multiplied by Sealvl-MinElev)
+float[] WaterVol={0, 0.4*VolumeFactor, 0.01*VolumeFactor, 0.4*VolumeFactor, 1*VolumeFactor, 0.01*VolumeFactor, 1*VolumeFactor};                  //WatterVolume in T Absolut (Water is Multiplied by Sealvl-MinElev)
 float[] StdEm={0, 1*EmissionFactor, 1*EmissionFactor, 1*EmissionFactor, 1*EmissionFactor, 1*EmissionFactor, 1*EmissionFactor};                     //Standard Energie Emssion [°C/Tick]
 
 
@@ -77,7 +77,7 @@ int WaterTempInf=0; //influence Water on Temp
 float DesertGroundWater=0.1, DesertTemp=35; //Moisture for Desert
 /////////////////////////////////////////
 
-float RainRate=0.2;
+float RainRate=0.05;
 float RainEnd=0.3, RainStart=1.4;
 int[] WaterPerLayer;//Shows place for Water per Layer
 int[][][] DataInt;
@@ -134,7 +134,7 @@ boolean Pause;
 boolean LocalPlantTypeSel=true;
 int WindowMinX, WindowMinY, WindowMaxX, WindowMaxY;
 
-int PlantTime, WeatherTime, WTime,PTime;
+int PlantTime, WeatherTime, WTime, PTime;
 void setup()
 {
 
@@ -143,6 +143,7 @@ void setup()
   //size(2000, 1000);
   frameRate(120);
   Erase=loadImage(DataPath+"Erase.png");
+  Erase.resize(w,w);
   Stats=createGraphics(60, 100);
   TPS=cp5.addTextlabel("TPS");
   fullScreen();
@@ -157,8 +158,8 @@ void setup()
    NewPlant("Edelweiss", 3, 0, 30, -10, 10, 160, 175, 30, 3, 30, 100);
    NewPlant("Lilie", 2, 0, 100, -10, 30, 100, 255, 1, 6, 100, 100);
    NewPlant("Birke", 1, 5, 80, 0, 30, 100, 255, 30, 8, 100, 1000);*/
-  LoadLocalPlantTypes(WorldName);
-  LoadGlobalPlantTypes();
+  LoadPlantTypes('l');
+  LoadPlantTypes('g');
   InitGui();
   //AddLocalToGlobalPlants();
   //LoadMap(WorldName);
@@ -206,11 +207,13 @@ void draw()
   if (Map!=null&&Overlay==0)
   {
     //background(0);
-    set( MapsZeroX, MapsZeroY, Map);
+
+    set(MapsZeroX, MapsZeroY, Map);
   }
   if (Overlay!=0&&OverlayReady)
   {
     //background(0);
+
     set( MapsZeroX, MapsZeroY, OverlayImg);
   }
   if (StatsReady)set(width-Stats.width, 0, Stats);
@@ -264,7 +267,7 @@ void Composite()
   Mask.beginDraw();
   if (Overlay==0&&FirstTick&&Maps!=null&&Mask!=null)
   {
-    Mask.set( 0, 0, Maps);
+    Mask.set( 0,0, Maps);
 
     if (ShowVegetation)Mask.image( Vegetation, 0, 0);
 
@@ -281,10 +284,10 @@ void Tick()
   WindowMinY=floor(-MapsZeroY/w);
   WindowMaxX=floor(WindowMinX+width/w);
   WindowMaxY=floor(WindowMinY+height/w);
-  if(WindowMaxX>=MapData[MapWidthI])WindowMaxX=int(MapData[MapWidthI]-1);
-  if(WindowMinX<0)WindowMinX=0;
-  if(WindowMaxY>=MapData[MapHeightI])WindowMaxY=int(MapData[MapHeightI]-1);
-  if(WindowMinY<0)WindowMinY=0;
+  if (WindowMaxX>=MapData[MapWidthI])WindowMaxX=int(MapData[MapWidthI]-1);
+  if (WindowMinX<0)WindowMinX=0;
+  if (WindowMaxY>=MapData[MapHeightI])WindowMaxY=int(MapData[MapHeightI]-1);
+  if (WindowMinY<0)WindowMinY=0;
   //println(WindowMinX, WindowMinY,WindowMaxX, WindowMaxY);
   TickEnd=false;
   if (PlantSet[0]!=0)
@@ -314,7 +317,7 @@ void Tick()
   WTime=millis();
   if (ShowWeather)DrawWeather();
   WeatherTime=millis()-WTime;
-  
+
   PrintTimeDebug("DrawWeather");
   DrawOverlay();
   PrintTimeDebug("DrawOverlay");

@@ -17,7 +17,7 @@ void SaveMap(String Name)
   SaveFloatMatrix(Hum, path+"\\Humidity",2);
   SaveFloatMatrix(GroundWater,path+"\\GroundWater",4);
   SavePlants(path+"//PlantData.txt");
-  SaveLocalPlants(path+"\\Plants\\");
+  //SaveLocalPlants(path+"\\Plants\\");
 }
 void SaveIntMatrix(int[][] Matrix, String Name)
 {

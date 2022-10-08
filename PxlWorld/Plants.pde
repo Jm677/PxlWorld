@@ -183,8 +183,8 @@ class Plant
     if (HealthIndexOld!=HealthIndex)
     {
       HealthIndexOld=HealthIndex;
-      Vegetation.set( X*w+Randomx, Y*w+Randomy, Pic[9]);
-      Vegetation.set( X*w, Y*w, Pic[HealthIndex]);
+      Vegetation.set( X*w, Y*w, Pic[9]);
+      Vegetation.set( X*w+w/2-Pic[HealthIndex].width/2, Y*w+w/2-Pic[HealthIndex].height/2, Pic[HealthIndex]);
     }
     // }
   }

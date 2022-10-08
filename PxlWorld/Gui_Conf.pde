@@ -171,6 +171,7 @@ void UpdateLocalPlantButtons()
 
   for (int i=1; i<LocalPlantTypes.size(); i++)
   {
+    //println(LocalPlantTypes.size());
 
     PImage P=LocalPlantTypes.get(i).PIC.get();
     PGraphics PZ=createGraphics(WIDTH, HEIGHT);
