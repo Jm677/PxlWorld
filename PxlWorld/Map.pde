@@ -45,11 +45,11 @@ void InitMap(boolean NewWorld)
 }
 void CreateGraphics()
 {
-  Maps= createGraphics(int(MapData[MapWidthI])*w, int(MapData[MapHeightI])*w);
-  Vegetation=createGraphics(int(MapData[MapWidthI])*w, int(MapData[MapHeightI])*w);
-  OverlayPic=createGraphics(int(MapData[MapWidthI])*w, int(MapData[MapHeightI])*w);
-  Mask=createGraphics(int(MapData[MapWidthI])*w, int(MapData[MapHeightI])*w);
-  Weather=createGraphics(int(MapData[MapWidthI])*w, int(MapData[MapHeightI])*w);
+  Maps= createGraphics(int(MapData[MapWidthI]*w), int(MapData[MapHeightI]*w));
+  Vegetation=createGraphics(int(MapData[MapWidthI]*w), int(MapData[MapHeightI]*w));
+  OverlayPic=createGraphics(int(MapData[MapWidthI]*w), int(MapData[MapHeightI]*w));
+  Mask=createGraphics(int(MapData[MapWidthI]*w), int(MapData[MapHeightI]*w));
+  Weather=createGraphics(int(MapData[MapWidthI]*w), int(MapData[MapHeightI]*w));
 }
 void createMap(boolean NewWorld)
 {

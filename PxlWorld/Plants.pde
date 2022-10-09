@@ -180,11 +180,12 @@ class Plant
      {
      */
     HealthIndex=floor(map(Health, 0, Live, 9, 0));
+    int XX=int(X*w),YY=int(Y*w);
     if (HealthIndexOld!=HealthIndex)
     {
       HealthIndexOld=HealthIndex;
-      Vegetation.set( X*w, Y*w, Pic[9]);
-      Vegetation.set( X*w+w/2-Pic[HealthIndex].width/2, Y*w+w/2-Pic[HealthIndex].height/2, Pic[HealthIndex]);
+      Vegetation.set( XX, YY, Pic[9]);
+      Vegetation.set( XX+w/2-Pic[HealthIndex].width/2, YY+w/2-Pic[HealthIndex].height/2, Pic[HealthIndex]);
     }
     // }
   }

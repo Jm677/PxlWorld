@@ -76,7 +76,7 @@ int GroundWaterInc=5;//GroundWater increase per Water in WaterRadius
 int WaterTempInf=0; //influence Water on Temp
 float DesertGroundWater=0.1, DesertTemp=35; //Moisture for Desert
 /////////////////////////////////////////
-
+float DrawOverhang=1.5;
 float RainRate=0.05;
 float RainEnd=0.3, RainStart=1.4;
 int[] WaterPerLayer;//Shows place for Water per Layer
