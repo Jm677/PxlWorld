@@ -174,3 +174,30 @@ String WorldPath()
 {
   return WorldPath+"\\"+WorldName;
 }
+void CheckBoundaries()
+{
+  if (MapsZeroYF>(DrawOverhang-1)*height/2)MapsZeroYF=int((DrawOverhang-1)*height/2);
+  else if (MapsZeroY+MapsZeroYF<height-Maps.height-(DrawOverhang-1)*height/2) MapsZeroYF=0;
+  if (MapsZeroX+MapsZeroXF>0)MapsZeroXF=0;
+  else if (MapsZeroX+MapsZeroXF<width-Maps.width) MapsZeroXF=0;
+
+
+  if (MapsZeroX+MapsZeroXF>0)MapsZeroXF=0;
+  if (abs(MapsZeroXOld-MapsZeroX)>w||abs(MapsZeroYOld-MapsZeroY)>w)
+  {
+    // background(0);
+    MapsZeroXOld=MapsZeroX;
+    MapsZeroYOld=MapsZeroY;
+    //set( MapsZeroX, MapsZeroY, Maps);
+  }
+  MAXX=(width-MapsZeroX)/w;
+  MAXY=(height-MapsZeroY)/w;
+  MINX=(-MapsZeroX)/w;
+  MINY=(-MapsZeroY)/w;
+  if (MapsZeroY+MapsZeroYF>(DrawOverhang-1)*height/2)MapsZeroY=int((DrawOverhang-1)*height/2);
+  else if (MapsZeroY<height-Maps.height-(DrawOverhang-1)*height/2) MapsZeroY=height-Maps.height;
+  if (MapsZeroX>0)MapsZeroX=0;
+  else if (MapsZeroX<width-Maps.width) MapsZeroX=width-Maps.width;
+  //println(MINX,MINY,MAXX,MAXY);
+  //println(MapsZeroX, MapsZeroY);
+}

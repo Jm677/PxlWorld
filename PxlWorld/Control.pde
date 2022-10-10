@@ -163,44 +163,11 @@ void mouseDragged()
   {
     if (mouseButton==LEFT)
     {
-      if (abs(MapsZeroX)<=Maps.width-width)
-      {
-        MapsZeroX+=mouseX-DragStartX;
-        MapsZeroXF+=mouseX-DragStartX;
-        DragStartX=mouseX;
-      } else
-      {
-        MapsZeroX=-Maps.width+width;
-      }
-      if (abs(MapsZeroY)<=Maps.height-height)
-      {
-        MapsZeroY+=mouseY-DragStartY;
-        MapsZeroYF+=mouseY-DragStartY;
-        DragStartY=mouseY;
-      } else
-      {
-        MapsZeroY=-Maps.height+height;
-      }
-
-
-
-      if (MapsZeroY>0)MapsZeroY=0;
-      if (MapsZeroX>0)MapsZeroX=0;
-      if (MapsZeroYF>0)MapsZeroYF=0;
-      if (MapsZeroXF>0)MapsZeroXF=0;
-      if (abs(MapsZeroXOld-MapsZeroX)>w||abs(MapsZeroYOld-MapsZeroY)>w)
-      {
-        // background(0);
-        MapsZeroXOld=MapsZeroX;
-        MapsZeroYOld=MapsZeroY;
-        //set( MapsZeroX, MapsZeroY, Maps);
-      }
-      MAXX=(width-MapsZeroX)/w;
-      MAXY=(height-MapsZeroY)/w;
-      MINX=(-MapsZeroX)/w;
-      MINY=(-MapsZeroY)/w;
-      //println(MINX,MINY,MAXX,MAXY);
-      //println(MapsZeroX, MapsZeroY);
+      MapsZeroXF+=mouseX-DragStartX;
+      DragStartX=mouseX;
+      MapsZeroYF+=mouseY-DragStartY;
+      DragStartY=mouseY;
+      CheckBoundaries();
     }
   }
 }

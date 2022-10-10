@@ -1,4 +1,4 @@
- import controlP5.*;
+import controlP5.*;
 import java.util.List;
 import java.io.FileFilter;
 ControlP5 cp5;
@@ -114,7 +114,7 @@ int TPSValue;
 int TicksPerSecondCounter;
 float MinTPS=1, MaxTPS=35;
 
-int CompositeTps=5;
+int CompositeTps=10;
 int Mpt=60; //Ingame Minutes per Tick
 int IngameTime;
 
@@ -143,7 +143,7 @@ void setup()
   //size(2000, 1000);
   frameRate(120);
   Erase=loadImage(DataPath+"Erase.png");
-  Erase.resize(w,w);
+  Erase.resize(w, w);
   Stats=createGraphics(60, 100);
   TPS=cp5.addTextlabel("TPS");
   fullScreen();
@@ -204,17 +204,20 @@ void draw()
   //Mask=Maps.get(-MapsZeroX,-MapsZeroY,-MapsZeroX+Maps.width,-MapsZeroY+Maps.width);
 
 
-  if (Map!=null&&Overlay==0)
+  if (Map!=null&&Overlay==0&&CompEnd)
   {
     //background(0);
-
-    set(MapsZeroX, MapsZeroY, Map);
+    set(int(MapsZeroXF-((DrawOverhang-1)*width/2)), int(MapsZeroYF-((DrawOverhang-1)*height/2)), Map);
+    /* println("////////Main////////////////");
+     
+     println(MapsZeroXF, MapsZeroYF);
+     println(MapsZeroX, MapsZeroY);*/
   }
   if (Overlay!=0&&OverlayReady)
   {
     //background(0);
 
-    set( MapsZeroX, MapsZeroY, OverlayImg);
+    set( 0, 0, OverlayImg);
   }
   if (StatsReady)set(width-Stats.width, 0, Stats);
   //if (Map!=null)image(Map, MapsZeroX, MapsZeroY);
@@ -263,20 +266,33 @@ void draw()
 }
 void Composite()
 {
-  CompEnd=false;
-  Mask.beginDraw();
-  if (Overlay==0&&FirstTick&&Maps!=null&&Mask!=null)
+  if (Overlay==0&&FirstTick)
   {
-    Mask.set( 0,0, Maps);
+    CompEnd=false;
+    Mask.beginDraw();
+
+    MapsZeroX+=MapsZeroXF;
+    MapsZeroY+=MapsZeroYF;
+    MapsZeroXF=0;
+    MapsZeroYF=0;
+    CheckBoundaries();
+    println("////////Comp////////////////");
+    println(MapsZeroXF, MapsZeroYF);
+    println(MapsZeroX, MapsZeroY);
+    Mask.set( MapsZeroX, MapsZeroY, Maps);
 
     if (ShowVegetation)Mask.image( Vegetation, 0, 0);
 
     if (ShowWeather)Mask.image( Weather, 0, 0);
-  }
 
-  Mask.endDraw();
-  Map=Mask.get();
-  CompEnd=true;
+
+    Mask.endDraw();
+    Map=Mask.get();
+    println("////////CompEnd////////////////");
+    println(MapsZeroXF, MapsZeroYF);
+    println(MapsZeroX, MapsZeroY);
+    CompEnd=true;
+  }
 }
 void Tick()
 {
