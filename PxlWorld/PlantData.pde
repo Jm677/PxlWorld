@@ -5,6 +5,7 @@ class PlantData
   color C;
   PImage[] Pic=new PImage[10];
   PImage PIC;
+  color DieBrown=color(102,51,0);
   PlantData(String name, int id, int moistMin, int moistMax, int tempMin, int tempMax, int heightMin, int heightMax, int fertilityRate, int fertilityRadius, int live, int livespan, PImage pic)
   {
     if (name!="0")
@@ -12,19 +13,24 @@ class PlantData
       //println("new Plant was added: "+name);
       println("new Plant was added:  \n Name: "+name+"\n Id: "+str(id)+"\n GroundWater: "+str(moistMin)+"-"+str(moistMax)+"\n Temp: "+str(tempMin)+"-"+str(tempMax)+
         "\n Height: "+str(heightMin)+"-"+str(heightMax)+"\n FertilityRate: "+str(fertilityRate)+"\n FertilityRadius: "+str(fertilityRadius)+"\n Live: "+str(live)+"\n Livespan: "+str(Livespan));
-        pic.resize(w, w);
+      pic.resize(w, w);
+      //MakeBrown(pic,1);
       Pic[0]=pic.get();
-      
       PIC=pic.get();
       if (Pic!=null)
       {
         println(" Picture loaded!");
         for (int i=1; i<9; i++)
         {
+          
+          Pic[i]=MakeColor(Pic[0],8-i,8,DieBrown);
+          /*
           Pic[i]=Pic[0].get();
-          int W=int(map(i,1,8,w/10.*9.,w/10.));
-          if(W<=1)W=1;
-          Pic[i].resize(W, W);
+         
+          
+          int W=int(map(i, 1, 8, w/10.*9., w/10.));
+          if (W<=1)W=1;
+          Pic[i].resize(W, W);*/
         }
         Pic[9]=Erase;
       } else println(" failed to load Picture!");

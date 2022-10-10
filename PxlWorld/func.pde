@@ -174,3 +174,27 @@ String WorldPath()
 {
   return WorldPath+"\\"+WorldName;
 }
+
+
+
+PImage MakeColor(PImage IN, int Stage, int Spec, color C)
+{
+  PImage Temp;
+  PGraphics TempG=createGraphics(IN.width, IN.height);
+  TempG.beginDraw();
+  for (int i=0; i<IN.width; i++)
+  {
+    for (int a=0; a<IN.height; a++)
+    {
+      color TempC=IN.get(i, a);
+      color TempCnew=color(map(Stage, 0, Spec, red(TempC), red(C)),map(Stage, 0, Spec, green(TempC), green(C)),map(Stage, 0, Spec, blue(TempC), blue(C)),alpha(TempC));
+      TempG.set(i,a,TempCnew);
+    }
+  }
+  TempG.endDraw();
+  Temp=TempG.get();
+
+
+
+  return Temp;
+}
