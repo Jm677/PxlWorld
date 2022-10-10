@@ -120,6 +120,7 @@ void keyPressed()
   //println("Sealvl: " +str(Sealvl));
   updateMapProp();
 }
+// lol hallo
 void mouseReleased()
 {
   int X=int(float(mouseX-MapsZeroX)/Maps.width*MapData[MapWidthI]), Y=int(float(mouseY-MapsZeroY)/Maps.height*int(MapData[MapHeightI]));
