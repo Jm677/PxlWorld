@@ -12,4 +12,6 @@ color
 PlantGroupColor=color(60, 110, 0, ColorAlpha),
 PlantGroupBackgroundColor=color(70, 170, 0, ColorAlpha-10),
 PerformaceGroupColor=color(50,ColorAlpha),
-PerformanceGroupBackgroundColor=color(50,ColorAlpha-50);
+PerformanceGroupBackgroundColor=color(50,ColorAlpha-50),
+EnvironmentGroupColor=color(50,ColorAlpha),
+EnvironmentGroupBackgroundColor=color(50,ColorAlpha-50);

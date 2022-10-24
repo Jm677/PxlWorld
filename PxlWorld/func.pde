@@ -198,3 +198,37 @@ PImage MakeColor(PImage IN, int Stage, int Spec, color C)
 
   return Temp;
 }
+
+
+float CalcAverage(float[][] data, int Interval)
+{
+  float D=0;
+  int xx=data.length, yy=data[0].length;
+  for (int i=0; i<xx; i+=Interval)
+  {
+    for (int a=0; a<yy; a+=Interval)
+    {
+      D+=data[i][a];
+    }
+  }
+  return D/(xx/Interval*yy/Interval);
+}
+
+
+float MatrixExtremePoint(float[][] data, String MINMAX)
+{
+  float D=0;
+  int xx=data.length, yy=data[0].length;
+  boolean Max=false;
+  if(MINMAX.equals("MAX"))Max=true;
+  else Max=false;
+  for (int i=0; i<xx; i++)
+  {
+    for (int a=0; a<yy; a++)
+    {
+      if(Max&&data[i][a]>D)D=data[i][a];
+      else if(!Max&&data[i][a]<D)D=data[i][a];
+    }
+  }
+  return D;
+}

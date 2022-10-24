@@ -4,15 +4,19 @@ float ButtonHeight=30;
 PFont GuiFont, GuiFontSmall;
 
 int FRAME=10;
+int ChartMultiplier = 4;
 int SmallTextSize=10, LargeTextSize=20;
+int SunFlux;
+final int MinFlux = 0, MaxFlux = 2000;
 boolean DrawWeatherOld, DrawVegetationOld;
 ;
-Group LocalPlantGroup, PerformanceGroup;
+Group LocalPlantGroup, PerformanceGroup, EnvironmentGroup;
 Accordion accordion;
-Slider TPSSlider, TPSReal;
-Textlabel TTLabel, FPSLabel, WeatherTimeLabel,PlantTimeLabel;
+Slider TPSSlider, TPSReal, FluxSlider;
+Textlabel TTLabel, FPSLabel, WeatherTimeLabel, PlantTimeLabel, TempLabel, MinTempDis, MaxTempDis;
 RadioButton LocalPlants;
 CheckBox ShowCheckBox;
+Chart ChrtAvgTemp;
 void InitGui()
 {
   GuiFont=createFont("Arial", LargeTextSize);
@@ -53,8 +57,8 @@ void InitGui()
     //.setColorLabel(color(255,100))
     //.setColorForeground(color(255,100))
     .setFont(GuiFont)
-    .setBackgroundColor(PerformanceGroupBackgroundColor);
-  ;
+    .setBackgroundColor(PerformanceGroupBackgroundColor)
+    ;
 
   TPSSlider=cp5.addSlider("TPSValue")
     .setPosition(FRAME, FRAME)
@@ -131,8 +135,72 @@ void InitGui()
     .addItem("Weather", 0)
     .addItem("Plants", 1)
     ;
-    ShowCheckBox.getItem(1).setState(true);
-    ShowCheckBox.getItem(0).setState(true);
+  ShowCheckBox.getItem(1).setState(true);
+  ShowCheckBox.getItem(0).setState(true);
+
+  /////////////////////////////Environment////////////////////////////////////
+  GuiIndex = 0;
+
+  EnvironmentGroup = cp5.addGroup("Env")
+    .setLabel("Environment")
+    .setBackgroundColor(color(0, 64))
+    .setBackgroundHeight(150)
+    .setHeight(int(ButtonHeight))
+    .setColorBackground(EnvironmentGroupColor)
+    .setMoveable(true)
+    //.setColorLabel(color(255,100))
+    //.setColorForeground(color(255,100))
+    .setFont(GuiFont)
+    .setBackgroundColor(EnvironmentGroupBackgroundColor)
+    ;
+
+  FluxSlider=cp5.addSlider("SunFlux")
+    .setPosition(FRAME, FRAME+GuiIndex*SmallTextSize)
+    .setLabel("Sun Flux")
+    //.setSize(20, 100)
+    .setRange(MinFlux, MaxFlux)
+    //.setNumberOfTickMarks(int(MaxTPS))
+    .setGroup(EnvironmentGroup)
+    .setFont(GuiFontSmall)
+    .setSliderMode(Slider.FIX)
+    ;
+  GuiIndex++;
+
+  ChrtAvgTemp = cp5.addChart("   ")
+    .setPosition(FRAME, FRAME + GuiIndex * SmallTextSize + 3)
+    .setSize(int(LeftBarWidth)-2*FRAME, SmallTextSize*ChartMultiplier)
+    .setRange(-20, 60)
+    .setView(Chart.LINE)
+    .setStrokeWeight(1.5)
+    .setColorCaptionLabel(color(40))
+    .setGroup(EnvironmentGroup)
+    ;
+
+  ChrtAvgTemp.addDataSet("AvgTempGraph");
+  ChrtAvgTemp.setData("AvgTempGraph", new float[100]);
+
+  GuiIndex+=ChartMultiplier;
+
+  TempLabel=cp5.addTextlabel("Temp")
+    .setPosition(FRAME, FRAME+GuiIndex*SmallTextSize)
+    .setValue("Temperature")
+    .setGroup(EnvironmentGroup)
+    .setFont(GuiFontSmall)
+    ;
+
+  MaxTempDis=cp5.addTextlabel("MaxTemp")
+    .setPosition(int(LeftBarWidth)-2*FRAME, FRAME+GuiIndex*SmallTextSize)
+    .setText("MaxTemp")
+    .setGroup(EnvironmentGroup)
+    .setFont(GuiFontSmall)
+    ;
+  MinTempDis=cp5.addTextlabel("MinTemp")
+    .setPosition(int(LeftBarWidth)-2*FRAME, FRAME+GuiIndex*SmallTextSize)
+    .setText("MaxTemp")
+    .setGroup(EnvironmentGroup)
+    .setFont(GuiFontSmall)
+    ;
+
 
   //////////////////////////////////////////////////////////////////////
   cp5.getTab("default")
@@ -148,7 +216,7 @@ void InitGui()
     .setHeight(int(ButtonHeight))
     .addItem(LocalPlantGroup)
     .addItem(PerformanceGroup)
-
+    .addItem(EnvironmentGroup)
     ;
   UpdateLocalPlantButtons();
 }
@@ -232,4 +300,10 @@ void updateGuiValues()
   else ShowCheckBox.getItem(0).setState(false);
   if (ShowVegetation)ShowCheckBox.getItem(1).setState(true);
   else ShowCheckBox.getItem(1).setState(false);
+  MapData[SunI] = SunFlux;
+  if (MapData[TssI] % 10 == 0) {
+    ChrtAvgTemp.unshift("AvgTempGraph", CalcAverage(Temp, 10));
+    MinTemp = int(MatrixExtremePoint(Temp, "MIN"));
+    MaxTemp = int(MatrixExtremePoint(Temp, "MAX"));
+  }
 }
