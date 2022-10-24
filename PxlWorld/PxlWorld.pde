@@ -226,6 +226,9 @@ void draw()
   //////////////////Analyse/////////////////////
   if (millis()-TPSTime>1000)
   {
+    long tmiens=millis();
+    println(MatrixExtremePoint(Temp,"MIN"));
+    println(millis()-tmiens);
     TPSTime=millis();
     TicksPerSecond=TicksPerSecondCounter;
     TicksPerSecondCounter=0;

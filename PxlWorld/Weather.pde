@@ -23,9 +23,9 @@ void DrawWeather()
   Weather.noStroke();
 
   float H=0;
-  for (int i=WindowMinX; i<WindowMaxX; i++)
+  for (int i=0; i<MapData[MapWidthI]; i++)
   {
-    for (int a=WindowMinY; a<WindowMaxY; a++)
+    for (int a=0; a<MapData[MapHeightI]; a++)
     {
       float Av=AirVol(i, a);
       color Fill;

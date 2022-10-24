@@ -10,7 +10,7 @@ boolean DrawWeatherOld, DrawVegetationOld;
 Group LocalPlantGroup, PerformanceGroup;
 Accordion accordion;
 Slider TPSSlider, TPSReal;
-Textlabel TTLabel, FPSLabel, WeatherTimeLabel,PlantTimeLabel;
+Textlabel TTLabel, FPSLabel, WeatherTimeLabel, PlantTimeLabel;
 RadioButton LocalPlants;
 CheckBox ShowCheckBox;
 void InitGui()
@@ -131,8 +131,8 @@ void InitGui()
     .addItem("Weather", 0)
     .addItem("Plants", 1)
     ;
-    ShowCheckBox.getItem(1).setState(true);
-    ShowCheckBox.getItem(0).setState(true);
+  ShowCheckBox.getItem(1).setState(true);
+  ShowCheckBox.getItem(0).setState(true);
 
   //////////////////////////////////////////////////////////////////////
   cp5.getTab("default")

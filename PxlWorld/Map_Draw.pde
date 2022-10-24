@@ -19,7 +19,6 @@ void drawMap()
           change=true;
           switch(Type[i][a])
           {
-
           case 1:
             float EF=map(round(Elev[i][a]/Troplines), round(int(Sealvl)/Troplines), round(MaxElev/Troplines), 1, 0);
             Fill=color(EF*red(DirtColor), EF*green(DirtColor), EF*blue(DirtColor));
