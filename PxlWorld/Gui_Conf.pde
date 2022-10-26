@@ -13,6 +13,7 @@ Slider TPSSlider, TPSReal;
 Textlabel TTLabel, FPSLabel, WeatherTimeLabel, PlantTimeLabel;
 RadioButton LocalPlants;
 CheckBox ShowCheckBox;
+Button AddPlant;
 void InitGui()
 {
   GuiFont=createFont("Arial", LargeTextSize);
@@ -141,6 +142,9 @@ void InitGui()
     .setId(1)
     //.setGroup(PlantGroup)
     ;
+  AddPlant=cp5.addButton("AddPlant")
+    .setGroup(LocalPlantGroup);
+
   LocalPlants=cp5.addRadioButton("");
   accordion = cp5.addAccordion("acc")
     .setPosition(LeftBarX, LeftBarY)
@@ -152,18 +156,24 @@ void InitGui()
     ;
   UpdateLocalPlantButtons();
 }
+
 void UpdateLocalPlantButtons()
 {
   //LoadPlantTypes('l');
   int ItemsPerRow=3;
 
   int WIDTH=int(LeftBarWidth/ItemsPerRow-FRAME*(1.+1./ItemsPerRow)), HEIGHT=WIDTH;
+  AddPlant.setWidth(WIDTH)
+    .setHeight(HEIGHT)
+    .setPosition(FRAME,FRAME)
+    .setLabel("+")
+    ;
   LocalPlants.remove();
   LocalPlants=cp5.addRadioButton("");
   LocalPlants
     .setItemsPerRow(ItemsPerRow)
     .setWidth(int(LeftBarWidth))
-    .setPosition(int(FRAME), int(FRAME))
+    .setPosition(int(FRAME), int(FRAME*2+HEIGHT))
     .setGroup(LocalPlantGroup)
     .setSpacingColumn(FRAME)
     .setSpacingRow(FRAME)
@@ -204,7 +214,8 @@ void UpdateLocalPlantButtons()
       .setWidth(WIDTH)
       ;
   }
-  LocalPlantGroup.setSize(int(LeftBarWidth), HEIGHT+FRAME+floor(LocalPlantTypes.size()/ItemsPerRow*(HEIGHT+FRAME)+FRAME));
+ 
+  LocalPlantGroup.setSize(int(LeftBarWidth), 2*(HEIGHT+FRAME)+floor(LocalPlantTypes.size()/ItemsPerRow*(HEIGHT+FRAME)+FRAME));
 }
 void controlEvent(ControlEvent theEvent) {
 
