@@ -1,4 +1,4 @@
-float LeftBarWidth = 0.1, LeftBarHeight=1, TopBarHeight=0.1, TopBarWidth=1-LeftBarWidth;
+, float LeftBarWidth = 0.1, LeftBarHeight=1, TopBarHeight=0.1, TopBarWidth=1-LeftBarWidth;
 float LeftBarX=0, LeftBarY=0, TopBarX=LeftBarWidth, TopBarY=0;
 float ButtonHeight=30;
 PFont GuiFont, GuiFontSmall;

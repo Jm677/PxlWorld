@@ -1,4 +1,4 @@
- import controlP5.*;
+import controlP5.*;
 import java.util.List;
 import java.io.FileFilter;
 ControlP5 cp5;
@@ -6,7 +6,7 @@ boolean Debug=false;
 String WorldName="World1";
 String WorldPath=("\\Saves\\");
 
-String DataPath=("\\Data\\");
+String DataPath=("\\data\\");
 String PlantsPath=(DataPath+"\\Plants\\");
 String SketchPath;
 PGraphics Maps, Vegetation, OverlayPic, Weather, Mask, Stats;
@@ -142,16 +142,17 @@ void setup()
   if (Tps<CompositeTps)CompositeTps=Tps;
   //size(2000, 1000);
   frameRate(120);
-  Erase=loadImage(DataPath+"Erase.png");
-  Erase.resize(w,w);
+
   Stats=createGraphics(60, 100);
   TPS=cp5.addTextlabel("TPS");
   fullScreen();
   SketchPath=sketchPath();
   println(SketchPath);
-  WorldPath=SketchPath+WorldPath;
+  WorldPath=SketchPath+DataPath+WorldPath;
   PlantsPath=SketchPath+PlantsPath;
   DataPath=SketchPath+DataPath;
+  Erase=loadImage(DataPath+"Erase.png");
+  Erase.resize(w, w);
   //smooth(2);
   InitMap(true);
   /*NewPlant("Tanne", 4, 0, 100, -10, 30, 100, 130, 3, 6, 100, 100);
@@ -270,7 +271,7 @@ void Composite()
   Mask.beginDraw();
   if (Overlay==0&&FirstTick&&Maps!=null&&Mask!=null)
   {
-    Mask.set( 0,0, Maps);
+    Mask.set( 0, 0, Maps);
 
     if (ShowVegetation)Mask.image( Vegetation, 0, 0);
 
