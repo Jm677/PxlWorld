@@ -187,8 +187,8 @@ PImage MakeColor(PImage IN, int Stage, int Spec, color C)
     for (int a=0; a<IN.height; a++)
     {
       color TempC=IN.get(i, a);
-      color TempCnew=color(map(Stage, 0, Spec, red(TempC), red(C)),map(Stage, 0, Spec, green(TempC), green(C)),map(Stage, 0, Spec, blue(TempC), blue(C)),alpha(TempC));
-      TempG.set(i,a,TempCnew);
+      color TempCnew=color(map(Stage, 0, Spec, red(TempC), red(C)), map(Stage, 0, Spec, green(TempC), green(C)), map(Stage, 0, Spec, blue(TempC), blue(C)), alpha(TempC));
+      TempG.set(i, a, TempCnew);
     }
   }
   TempG.endDraw();
@@ -217,17 +217,17 @@ float CalcAverage(float[][] data, int Interval)
 
 float MatrixExtremePoint(float[][] data, String MINMAX)
 {
-  float D=0;
+  float D = data[0][0];
   int xx=data.length, yy=data[0].length;
   boolean Max=false;
-  if(MINMAX.equals("MAX"))Max=true;
+  if (MINMAX.equals("MAX"))Max=true;
   else Max=false;
   for (int i=0; i<xx; i++)
   {
     for (int a=0; a<yy; a++)
     {
-      if(Max&&data[i][a]>D)D=data[i][a];
-      else if(!Max&&data[i][a]<D)D=data[i][a];
+      if (Max&&data[i][a]>D)D=data[i][a];
+      else if (!Max&&data[i][a]<D)D=data[i][a];
     }
   }
   return D;
