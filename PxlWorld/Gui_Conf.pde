@@ -9,6 +9,7 @@ int SmallTextSize=10, LargeTextSize=20;
 int SunFlux;
 final int MinFlux = 0, MaxFlux = 2000;
 boolean DrawWeatherOld, DrawVegetationOld;
+String LowTemp, HighTemp;
 ;
 Group LocalPlantGroup, PerformanceGroup, EnvironmentGroup;
 Accordion accordion;
@@ -165,6 +166,15 @@ void InitGui()
     .setSliderMode(Slider.FIX)
     ;
   GuiIndex++;
+  
+    MaxTempDis=cp5.addTextlabel("MaxTemp")
+    .setPosition(int(LeftBarWidth)-FRAME-7*SmallTextSize, FRAME+GuiIndex*SmallTextSize)
+    .setValue("null")
+    .setGroup(EnvironmentGroup)
+    .setFont(GuiFontSmall)
+    ;
+    
+  GuiIndex++;
 
   ChrtAvgTemp = cp5.addChart("   ")
     .setPosition(FRAME, FRAME + GuiIndex * SmallTextSize + 3)
@@ -187,20 +197,17 @@ void InitGui()
     .setGroup(EnvironmentGroup)
     .setFont(GuiFontSmall)
     ;
+    
+  
 
-  MaxTempDis=cp5.addTextlabel("MaxTemp")
-    .setPosition(int(LeftBarWidth)-2*FRAME, FRAME+GuiIndex*SmallTextSize)
-    .setText("MaxTemp")
-    .setGroup(EnvironmentGroup)
-    .setFont(GuiFontSmall)
-    ;
   MinTempDis=cp5.addTextlabel("MinTemp")
-    .setPosition(int(LeftBarWidth)-2*FRAME, FRAME+GuiIndex*SmallTextSize)
-    .setText("MaxTemp")
+    .setPosition(int(LeftBarWidth)-FRAME-7*SmallTextSize+5, FRAME+GuiIndex*SmallTextSize)
+    .setValue("null")
     .setGroup(EnvironmentGroup)
     .setFont(GuiFontSmall)
     ;
 
+  GuiIndex++;
 
   //////////////////////////////////////////////////////////////////////
   cp5.getTab("default")
@@ -303,7 +310,9 @@ void updateGuiValues()
   MapData[SunI] = SunFlux;
   if (MapData[TssI] % 10 == 0) {
     ChrtAvgTemp.unshift("AvgTempGraph", CalcAverage(Temp, 10));
-    MinTemp = int(MatrixExtremePoint(Temp, "MIN"));
-    MaxTemp = int(MatrixExtremePoint(Temp, "MAX"));
+    LowTemp = String.format("Tmin: %3.2f °C", MatrixExtremePoint(Temp, "MIN"));
+    HighTemp = String.format("Tmax: %3.2f °C", MatrixExtremePoint(Temp, "MAX"));
+    MinTempDis.setValue(LowTemp);
+    MaxTempDis.setValue(HighTemp);
   }
 }
